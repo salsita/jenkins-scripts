@@ -5,6 +5,8 @@ set -x
 # Load common variables.
 source common.sh
 
+cd ${WORKSPACE}
+
 # Remove the old image.
 $DOCKER rmi ${IMAGE_TAG_BUILD}
 
