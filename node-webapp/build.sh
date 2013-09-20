@@ -9,7 +9,7 @@ source common.sh
 $DOCKER rmi ${IMAGE_TAG_BUILD}
 
 ### Build the new Docker image to use for the job.
-$DOCKER build -rm -t ${IMAGE_TAG_BUIL} .
+$DOCKER build -rm -t ${IMAGE_TAG_BUILD} .
 
 # Run in the background so that we know the container id.
 CONTAINER=$( \
