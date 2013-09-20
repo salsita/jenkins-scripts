@@ -1,4 +1,6 @@
-#!/bin/sh
+#!/bin/bash
+set -e
+set -x
 
 # Load common variables.
 source common.sh

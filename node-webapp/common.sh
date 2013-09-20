@@ -1,4 +1,6 @@
-#!/bin/sh
+#!/bin/bash
+set -e
+set -x
 
 # This file should be idempotent. It's sourced from various other scripts.
 
