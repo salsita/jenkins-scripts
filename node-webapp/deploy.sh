@@ -27,4 +27,10 @@ sleep 5
 
 # Check it's really running.
 status node-webapp INST=${UPSTART_INST} | grep 'running'
-exit $?
+RC=$?
+
+if [ ${RC} -ne 0 ]; then
+    sudo cat /var/log/upstart/node-webapp-${UPSTART_INST}.log
+fi;
+
+exit ${RC}
