@@ -13,5 +13,3 @@ for cidfile in `ls ${CID_DIR}`; do
   $DOCKER rm `cat ${CID_DIR}/${cidfile}`
   rm -f ${cidfile}
 done
-
-sudo chown -R jenkins-slave:jenkins-slave /var/lib/jenkins/${service}-${environment}
