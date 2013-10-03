@@ -9,6 +9,7 @@ DOCKER="docker -H tcp://127.0.0.1"
 IMAGE_TAG="${service}-${environment}"
 IMAGE_TAG_BUILD="${service}-${environment}-current-build"
 CID_DIR="${WORKSPACE}/../cids"
+DATA_DIR="${WORKSPACE}/../data"
 
 UPSTART_INST="${service}#${environment}"
 

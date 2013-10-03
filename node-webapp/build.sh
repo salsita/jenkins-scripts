@@ -15,7 +15,9 @@ $DOCKER build -rm -t ${IMAGE_TAG_BUILD} .
 
 # Run in the background so that we know the container id.
 CONTAINER=$( \
-  $DOCKER run -cidfile ${CID_DIR}/build-${BUILD_NUMBER}.cid -d -e NODE_ENV=${environment} ${docker_opts} ${IMAGE_TAG_BUILD} \
+  $DOCKER run -cidfile ${CID_DIR}/build-${BUILD_NUMBER}.cid -d \
+  -v "${DATA_DIR}:/data" \
+  -e NODE_ENV=${environment} ${docker_opts} ${IMAGE_TAG_BUILD} \
   /bin/bash -c "cd /srv/project/deploy && make build")
 
 $DOCKER attach ${CONTAINER} 
