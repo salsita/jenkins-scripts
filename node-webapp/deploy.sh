@@ -25,10 +25,11 @@ sudo start node-webapp INST=${UPSTART_INST}
 # Give it time to start (or fail while starting).
 sleep 5
 
+# Output the upstart log to the console to allow debugging.
+sudo cat /var/log/upstart/node-webapp-${UPSTART_INST}.log
+
 # Check it's really running.
 status node-webapp INST=${UPSTART_INST} | grep 'running'
 RC=$?
-
-sudo cat /var/log/upstart/node-webapp-${UPSTART_INST}.log
 
 exit ${RC}
