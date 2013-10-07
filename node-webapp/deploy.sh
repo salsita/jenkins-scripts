@@ -29,8 +29,6 @@ sleep 5
 status node-webapp INST=${UPSTART_INST} | grep 'running'
 RC=$?
 
-if [ ${RC} -ne 0 ]; then
-    sudo cat /var/log/upstart/node-webapp-${UPSTART_INST}.log
-fi;
+sudo cat /var/log/upstart/node-webapp-${UPSTART_INST}.log
 
 exit ${RC}
