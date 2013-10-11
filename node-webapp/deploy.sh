@@ -20,7 +20,7 @@ $DOCKER rmi ${IMAGE_TAG}
 $DOCKER tag ${IMAGE_TAG_BUILD} ${IMAGE_TAG}
 
 # Start the new build.
-sudo DOCKER_OPTS=${docker_opts} start node-webapp INST=${UPSTART_INST}
+sudo DOCKER_OPTS="${docker_opts}" start node-webapp INST=${UPSTART_INST}
 
 # Give it time to start (or fail while starting).
 sleep 5
