@@ -12,7 +12,7 @@ $DOCKER run -cidfile ${CID_DIR}/test-${BUILD_NUMBER}.cid -e NODE_ENV=${environme
 CONTAINER=`cat ${CID_DIR}/test-${BUILD_NUMBER}.cid`
 
 IMAGE=$($DOCKER commit ${CONTAINER})
-TEST_RESULTS=$($DOCKER run -cidfile ${CID_DIR}/find-test-${BUILD_NUMBER}.cid ${IMAGE} /bin/bash -c "find /srv/project/ -name 'test-results*.xml' | grep -v node_modules")
+TEST_RESULTS=$($DOCKER run -cidfile ${CID_DIR}/find-test-${BUILD_NUMBER}.cid ${docker_opts} ${IMAGE} /bin/bash -c "find /srv/project/ -name 'test-results*.xml' | grep -v node_modules")
 $DOCKER rmi ${IMAGE}
 
 # Delete the old test results (just in case we're not deleting the workspace).
