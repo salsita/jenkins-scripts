@@ -14,3 +14,4 @@ DATA_DIR="${WORKSPACE}/../data"
 UPSTART_INST="${service}#${environment}"
 
 mkdir -p ${CID_DIR}
+mkdir -p ${DATA_DIR}
