@@ -5,8 +5,10 @@ set -x
 # Load common variables.
 source common.sh
 
-# Remove the build image.
-$DOCKER rmi ${IMAGE_TAG_BUILD}
+if [ `$DOCKER images | grep ${IMAGE_TAG}` -ne 0 ]; then
+  # Remove the build image.
+  $DOCKER rmi ${IMAGE_TAG_BUILD}
+fi
 
 # Remove the containers to free disk space.
 for cidfile in `ls ${CID_DIR}`; do
