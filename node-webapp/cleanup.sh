@@ -15,3 +15,6 @@ for cidfile in `ls ${CID_DIR}`; do
   $DOCKER rm `cat ${CID_DIR}/${cidfile}`
   rm -f ${cidfile}
 done
+
+# Remove artifacts
+rm -rf ${ARTIFACTS_DIR}
