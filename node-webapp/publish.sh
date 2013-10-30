@@ -17,6 +17,12 @@ fi
 FILES_COUNT=`find "${ARTIFACTS_DIR}" -maxdepth 1 -type f | wc -l`
 DIRS_COUNT=`find "${ARTIFACTS_DIR}" -maxdepth 1 -type d -not -path "${ARTIFACTS_DIR}" | wc -l`
 
+# don't do anything if no artifacts found
+if [[ ${FILES_COUNT} -eq 0 && ${DIRS_COUNT} -eq 0 ]]; then
+  echo "No artifacts found"
+  exit
+fi
+
 set +e
 [[ ${FILES_COUNT} -eq 1 && ${DIRS_COUNT} -eq 0 ]]
 ONE_FILE=$?
