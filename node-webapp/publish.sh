@@ -8,7 +8,8 @@ source common.sh
 # parse version from package.json
 PACKAGE_JSON_FILE="${WORKSPACE}/package.json"
 if [[ -f ${PACKAGE_JSON_FILE} ]]; then
-  VERSION=`cat "${PACKAGE_JSON_FILE}" | ruby -r json -e 'puts JSON.parse(STDIN.read)["version"]'`
+  PROJECT_NAME=`cat "${PACKAGE_JSON_FILE}" | ruby -r json -e 'puts JSON.parse(STDIN.read)["name"]'`
+  PROJECT_VERSION=`cat "${PACKAGE_JSON_FILE}" | ruby -r json -e 'puts JSON.parse(STDIN.read)["version"]'`
 fi
 
 # if there is one artifact file, we will use it
@@ -21,9 +22,14 @@ set +e
 ONE_FILE=$?
 set -e
 
-# create version tag
-if [ ${VERSION} ]; then
-  ARTIFACT_VERSION="-${VERSION}"
+# artifact filename parts
+if [ ${PROJECT_NAME} ]; then
+  ARTIFACT_NAME="${PROJECT_NAME}"
+else
+  ARTIFACT_NAME="${IMAGE_TAG}"
+fi
+if [ ${PROJECT_VERSION} ]; then
+  ARTIFACT_VERSION="-${PROJECT_VERSION}"
 fi
 ARTIFACT_BUILD="+${BUILD_NUMBER}"
 
@@ -41,7 +47,7 @@ if [ ${ONE_FILE} -eq 0 ]; then
     ARTIFACT_PUBLIC=`echo "${ARTIFACT}" | sed "s/\./${ARTIFACT_BUILD}\./"`
   fi
 else
-  ARTIFACT_PUBLIC="${IMAGE_TAG}${ARTIFACT_VERSION}${ARTIFACT_BUILD}.tar.gz"
+  ARTIFACT_PUBLIC="${ARTIFACT_NAME}${ARTIFACT_VERSION}${ARTIFACT_BUILD}.tar.gz"
 fi
 
 # publish artifact
