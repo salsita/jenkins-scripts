@@ -79,6 +79,12 @@ createJobFromTemplate = (env) ->
     for xpath, val of getTokenDict(REPO_NAME, getBranch(env))
       elem = jobCfg.get xpath
       elem.text elem.text().replace(/\[\[.+\]\]/, val)
+
+    if env is 'client'
+      console.log "#{env}: removing GitHub push trigger (we don't want " +
+        "the client env to deploy on push..."
+      jobCfg.get('//com.cloudbees.jenkins.GitHubPushTrigger').remove()
+
     console.log "#{env}: Replaced tokens..."
     jobCfg
 
