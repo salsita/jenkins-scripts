@@ -13,12 +13,13 @@ USERNAME = PASSWORD = null
 jenkinsAPI = null
 
 getBranch = (env) ->
-  {
+  dict = {
     'dev': 'origin/develop'
     'qa': 'origin/release**'
     'client': 'origin/release**'
     'master': 'origin/master'
-  }[env]
+  }
+  dict[env]
 
 getTokenDict = (repo, branch) ->
   {
@@ -26,7 +27,7 @@ getTokenDict = (repo, branch) ->
     '//scm//hudson.plugins.git.UserRemoteConfig/url': "#{repo}.git"
     '//scm/branches/hudson.plugins.git.BranchSpec/name': branch
     '//scm/browser/url': repo
-    '/com.tikal.jenkins.plugins.multijob.MultiJobProject/disabled': false
+    '/com.tikal.jenkins.plugins.multijob.MultiJobProject/disabled': 'false'
   }
 
 
@@ -78,7 +79,10 @@ createJobFromTemplate = (env) ->
   .then (jobCfg) ->
     for xpath, val of getTokenDict(REPO_NAME, getBranch(env))
       elem = jobCfg.get xpath
-      elem.text elem.text().replace(/\[\[.+\]\]/, val)
+      if ~elem.text().indexOf('[[')
+        elem.text elem.text().replace(/\[\[.+\]\]/, val)
+      else
+        elem.text(val)
 
     if env is 'client'
       console.log "#{env}: removing GitHub push trigger (we don't want " +
@@ -94,7 +98,7 @@ createJobFromTemplate = (env) ->
     xml = jobCfg.toString()
     name = "#{PROJECT_NAME} #{env}"
 
-    console.log "#{env}: Creating a new job #{name} in Jenkins..."
+    console.log "#{env}: Creating a new job #{name} in Jenkins...", xml
 
     Q.nfcall(jenkinsAPI.job.create, name, xml)
       .then ->
