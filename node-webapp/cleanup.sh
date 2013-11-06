@@ -5,6 +5,8 @@ set -x
 # Load common variables.
 source common.sh
 
+sudo chown -R jenkins-slave:jenkins-slave ${WORKSPACE}
+
 if [ `$DOCKER images | grep ${IMAGE_TAG}` -eq 0 ]; then
   # Remove the build image.
   $DOCKER rmi ${IMAGE_TAG_BUILD}
