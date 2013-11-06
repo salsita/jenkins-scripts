@@ -24,6 +24,8 @@ $DOCKER attach ${CONTAINER}
 
 RC=$($DOCKER wait ${CONTAINER})
 
+sudo chown -R jenkins-slave:jenkins-slave ${WORKSPACE}
+
 if [ $RC -ne 0 ]; then
   exit $RC;
 fi
