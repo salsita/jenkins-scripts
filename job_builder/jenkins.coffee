@@ -14,10 +14,10 @@ jenkinsAPI = null
 
 getBranch = (env) ->
   {
-    'dev': 'origin/develop'
-    'qa': 'origin/release**'
-    'client': 'origin/release**'
-    'master': 'origin/master'
+    dev: 'origin/develop'
+    qa: 'origin/release**'
+    client: 'origin/release**'
+    prod: 'origin/master'
   }[env]
 
 getTokenDict = (repo, branch) ->
