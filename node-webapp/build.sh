@@ -25,6 +25,7 @@ $DOCKER attach ${CONTAINER}
 RC=$($DOCKER wait ${CONTAINER})
 
 sudo chown -R jenkins-slave:jenkins-slave ${WORKSPACE}
+sudo chown -R jenkins-slave:jenkins-slave ${DATA_DIR}
 
 if [ $RC -ne 0 ]; then
   exit $RC;
