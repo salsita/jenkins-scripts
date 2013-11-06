@@ -13,13 +13,12 @@ USERNAME = PASSWORD = null
 jenkinsAPI = null
 
 getBranch = (env) ->
-  dict = {
-    'dev': 'origin/develop'
-    'qa': 'origin/release**'
-    'client': 'origin/release**'
-    'master': 'origin/master'
-  }
-  dict[env]
+  {
+    dev: 'origin/develop'
+    qa: 'origin/release**'
+    client: 'origin/release**'
+    prod: 'origin/master'
+  }[env]
 
 getTokenDict = (repo, branch) ->
   {
