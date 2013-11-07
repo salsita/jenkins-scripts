@@ -75,6 +75,24 @@ Q.nfcall(read, {prompt: 'Jenkins username: '}).then (username) ->
 .done()
 
 
+cfgPostProcessFuns = {
+  client: (jobCfg) ->
+    console.log "client: removing GitHub push trigger (we don't want " +
+      "the client env to deploy on push..."
+    jobCfg.get('//com.cloudbees.jenkins.GitHubPushTrigger').remove()
+    return jobCfg
+
+  try: (jobCfg) ->
+    console.log "try: removing unit test step (we don't want " +
+      "to run unit tests in the try env..."
+    jobCfg.get(
+      '//com.tikal.jenkins.plugins.multijob.MultiJobBuilder[' +
+        'phaseName/text()="unittest"]').remove()
+    return jobCfg
+}
+
+
+
 # Copies `PARENT_JOB` to a new job and modifies the new job's values
 # accordingly.
 createJobFromTemplate = (env) ->
@@ -94,13 +112,10 @@ createJobFromTemplate = (env) ->
       else
         elem.text(val)
 
-    if env is 'client'
-      console.log "#{env}: removing GitHub push trigger (we don't want " +
-        "the client env to deploy on push..."
-      jobCfg.get('//com.cloudbees.jenkins.GitHubPushTrigger').remove()
-
+    jobCfg = cfgPostProcessFuns[env]?(jobCfg) or jobCfg
     console.log "#{env}: Replaced tokens..."
-    jobCfg
+
+    return jobCfg
 
   # Tokens replaced, we have a working config => POST the config to Jenkins
   # to create a new job.
@@ -108,7 +123,7 @@ createJobFromTemplate = (env) ->
     xml = jobCfg.toString()
     name = "#{PROJECT_NAME} #{env}"
 
-    console.log "#{env}: Creating a new job #{name} in Jenkins..."
+    console.log "#{env}: Creating a new job #{name} in Jenkins...", xml
 
     Q.nfcall(jenkinsAPI.job.create, name, xml)
       .then ->
