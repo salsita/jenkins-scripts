@@ -10,7 +10,12 @@ REPO_NAME = null
 DATA = null
 USERNAME = PASSWORD = null
 
+# Jenkins API connector object (shared between promises).
 jenkinsAPI = null
+
+
+ENVS = ['dev', 'qa', 'client', 'prod', 'try']
+
 
 getBranch = (env) ->
   {
@@ -18,7 +23,9 @@ getBranch = (env) ->
     qa: 'origin/release**'
     client: 'origin/release**'
     prod: 'origin/master'
+    try: 'origin/try**'
   }[env]
+
 
 getTokenDict = (repo, branch) ->
   {
@@ -29,6 +36,8 @@ getTokenDict = (repo, branch) ->
     '/com.tikal.jenkins.plugins.multijob.MultiJobProject/disabled': 'false'
   }
 
+console.log "This script will create a Jenkins job for a projects for each " +
+  "of the following environments: #{ENVS.join ', '}."
 
 # Prompt for Jenkins username.
 Q.nfcall(read, {prompt: 'Jenkins username: '}).then (username) ->
@@ -61,11 +70,13 @@ Q.nfcall(read, {prompt: 'Jenkins username: '}).then (username) ->
 
 .then ->
   # Create a job for each of the 4 envs.
-  Q.all (createJobFromTemplate(env) for env in ['dev', 'qa', 'client', 'prod'])
+  Q.all (createJobFromTemplate(env) for env in ENVS)
 
 .done()
 
 
+# Copies `PARENT_JOB` to a new job and modifies the new job's values
+# accordingly.
 createJobFromTemplate = (env) ->
   # Get the parent job.
   Q.nfcall(jenkinsAPI.job.config, PARENT_JOB)
@@ -97,7 +108,7 @@ createJobFromTemplate = (env) ->
     xml = jobCfg.toString()
     name = "#{PROJECT_NAME} #{env}"
 
-    console.log "#{env}: Creating a new job #{name} in Jenkins...", xml
+    console.log "#{env}: Creating a new job #{name} in Jenkins..."
 
     Q.nfcall(jenkinsAPI.job.create, name, xml)
       .then ->
