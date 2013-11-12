@@ -4,9 +4,11 @@ read = require 'read'
 jenkins = require 'jenkins'
 
 PARENT_JOB = 'ABSTRACT NodeJS WebApp'
+DEF_GIT_ORG = 'salsita'
 
 PROJECT_NAME = null
 REPO_NAME = null
+ORGANIZATION = null
 DATA = null
 USERNAME = PASSWORD = null
 
@@ -27,12 +29,12 @@ getBranch = (env) ->
   }[env]
 
 
-getTokenDict = (repo, branch) ->
+getTokenDict = (organization, repo, branch) ->
   {
-    '//com.coravy.hudson.plugins.github.GithubProjectProperty/projectUrl': repo
-    '//scm//hudson.plugins.git.UserRemoteConfig/url': "#{repo}.git"
+    '//com.coravy.hudson.plugins.github.GithubProjectProperty/projectUrl': "#{organization}/#{repo}"
+    '//scm//hudson.plugins.git.UserRemoteConfig/url': "#{organization}/#{repo}.git"
     '//scm/branches/hudson.plugins.git.BranchSpec/name': branch
-    '//scm/browser/url': repo
+    '//scm/browser/url': "#{organization}/#{repo}"
     '/com.tikal.jenkins.plugins.multijob.MultiJobProject/disabled': 'false'
   }
 
@@ -69,6 +71,10 @@ Q.nfcall(read, {prompt: 'Jenkins username: '}).then (username) ->
     REPO_NAME = name[0]
 
 .then ->
+  Q.nfcall(read, {prompt: 'Github organization: ', default: DEF_GIT_ORG}).then (org) ->
+    ORGANIZATION = org[0]
+
+.then ->
   # Create a job for each of the 4 envs.
   Q.all (createJobFromTemplate(env) for env in ENVS)
 
@@ -92,7 +98,6 @@ cfgPostProcessFuns = {
 }
 
 
-
 # Copies `PARENT_JOB` to a new job and modifies the new job's values
 # accordingly.
 createJobFromTemplate = (env) ->
@@ -105,7 +110,7 @@ createJobFromTemplate = (env) ->
 
   # Replace the tokens.
   .then (jobCfg) ->
-    for xpath, val of getTokenDict(REPO_NAME, getBranch(env))
+    for xpath, val of getTokenDict(ORGANIZATION, REPO_NAME, getBranch(env))
       elem = jobCfg.get xpath
       if ~elem.text().indexOf('[[')
         elem.text elem.text().replace(/\[\[.+\]\]/, val)
@@ -123,7 +128,7 @@ createJobFromTemplate = (env) ->
     xml = jobCfg.toString()
     name = "#{PROJECT_NAME} #{env}"
 
-    console.log "#{env}: Creating a new job #{name} in Jenkins...", xml
+    console.log "#{env}: Creating a new job #{name} in Jenkins..."
 
     Q.nfcall(jenkinsAPI.job.create, name, xml)
       .then ->
