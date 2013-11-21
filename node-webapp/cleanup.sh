@@ -12,10 +12,10 @@ if [ `$DOCKER images | grep ${IMAGE_TAG}` -eq 0 ]; then
   $DOCKER rmi ${IMAGE_TAG_BUILD}
 fi
 
-# Remove the containers to free disk space.
+# Remove the containers to free disk spaaace.
 for cidfile in `ls ${CID_DIR}`; do
   $DOCKER rm `cat ${CID_DIR}/${cidfile}`
-  rm -f ${cidfile}
+  rm -f ${CID_DIR}/${cidfile}
 done
 
 # Remove artifacts
