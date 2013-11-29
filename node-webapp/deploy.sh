@@ -11,9 +11,6 @@ sudo stop node-webapp INST=${UPSTART_INST} || true
 # Wait for the process to be stopped
 sleep 5
 
-# Remove the old image (we don't need it anymore).
-$DOCKER rmi ${IMAGE_TAG}
-
 # Re-tag the image with the built app. We're doing this in the deploy step
 # because only here it is that we know the build is OK (tests have passed etc.)
 # so we can safely re-deploy this build when the Docker server reboots.
