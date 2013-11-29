@@ -8,7 +8,7 @@ source common.sh
 cd ${WORKSPACE}
 
 # Remove the old image.
-$DOCKER rmi ${IMAGE_TAG_BUILD}
+$DOCKER rmi ${IMAGE_TAG_BUILD} || true
 
 ### Build the new Docker image to use for the job.
 $DOCKER build -rm -t ${IMAGE_TAG_BUILD} .
