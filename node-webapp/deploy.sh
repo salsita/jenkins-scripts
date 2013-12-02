@@ -18,13 +18,12 @@ $DOCKER tag ${IMAGE_TAG_BUILD} ${IMAGE_TAG}
 
 # Start the new build.
 sudo DOCKER_OPTS="${docker_opts}" start node-webapp INST=${UPSTART_INST}
-CID=`${DOCKER} ps -a -q -l`
 
 # Give it time to start (or fail while starting).
 sleep 5
 
 # Output the upstart log to the console to allow debugging.
-${DOCKER} logs ${CID}
+sudo tail -50 /var/log/upstart/node-webapp-${UPSTART_INST}.log
 
 # Check it's really running.
 status node-webapp INST=${UPSTART_INST} | grep 'running'
