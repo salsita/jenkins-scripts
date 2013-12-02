@@ -8,7 +8,7 @@ source common.sh
 cd ${WORKSPACE}
 
 ### Build the new Docker image to use for the job.
-$DOCKER build -rm -t ${IMAGE_TAG_BUILD} .
+$DOCKER build -t ${IMAGE_TAG_BUILD} .
 
 # Run in the background so that we know the container id.
 CONTAINER=$( \
