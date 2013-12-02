@@ -18,7 +18,7 @@ $DOCKER tag ${IMAGE_TAG_BUILD} ${IMAGE_TAG}
 
 # Start the new build.
 sudo DOCKER_OPTS="${docker_opts}" start node-webapp INST=${UPSTART_INST}
-CID=`${DOCKER} ps -a -q`
+CID=`${DOCKER} ps -a -q -l`
 
 # Give it time to start (or fail while starting).
 sleep 5
