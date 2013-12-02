@@ -22,3 +22,6 @@ UPSTART_INST="${service}#${environment}"
 
 mkdir -p ${CID_DIR}
 mkdir -p ${DATA_DIR}
+
+# Make sure workspace is owned by Jenkins.
+sudo chown -R jenkins-slave:jenkins-slave ${WORKSPACE}
