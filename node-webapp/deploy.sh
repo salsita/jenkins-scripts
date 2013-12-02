@@ -20,7 +20,7 @@ $DOCKER rmi ${IMAGE_TAG}
 $DOCKER tag ${IMAGE_TAG_BUILD} ${IMAGE_TAG}
 
 # Start the new build.
-sudo DOCKER_OPTS="${docker_opts}" start node-webapp INST=${UPSTART_INST}
+sudo DOCKER_OPTS="${docker_opts} -v '${WORKSPACE/src}:/srv/project'" start node-webapp INST=${UPSTART_INST}
 
 # Give it time to start (or fail while starting).
 sleep 5
@@ -31,5 +31,7 @@ sudo cat /var/log/upstart/node-webapp-${UPSTART_INST}.log
 # Check it's really running.
 status node-webapp INST=${UPSTART_INST} | grep 'running'
 RC=$?
+
+sudo chown -R jenkins-slave:jenkins-slave ${WORKSPACE}
 
 exit ${RC}
