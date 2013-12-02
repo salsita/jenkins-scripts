@@ -19,6 +19,7 @@ ARTIFACTS_DIR="${DATA_DIR}/artifacts"
 ARTIFACTS_PUBLIC_DIR="/var/www/artifacts/${IMAGE_TAG}-${IMAGE_HASH}"
 
 UPSTART_INST="${service}#${environment}"
+DOCKER_DEFAULT_OPTS="-v ${WORKSPACE}:/srv/project"
 
 mkdir -p ${CID_DIR}
 mkdir -p ${DATA_DIR}
