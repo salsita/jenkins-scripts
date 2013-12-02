@@ -7,11 +7,8 @@ source common.sh
 
 cd ${WORKSPACE}
 
-# Remove the old image.
-$DOCKER rmi ${IMAGE_TAG_BUILD}
-
 ### Build the new Docker image to use for the job.
-$DOCKER build -rm -t ${IMAGE_TAG_BUILD} .
+$DOCKER build -t ${IMAGE_TAG_BUILD} .
 
 # Run in the background so that we know the container id.
 CONTAINER=$( \
