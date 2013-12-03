@@ -7,7 +7,10 @@ source common.sh
 
 cd ${WORKSPACE}
 
-$DOCKER run -cidfile ${CID_DIR}/test-${BUILD_NUMBER}.cid -e NODE_ENV=${environment} ${docker_opts} ${IMAGE_TAG_BUILD} /bin/bash -c "cd /srv/project/deploy && make test"
+$DOCKER run -cidfile ${CID_DIR}/test-${BUILD_NUMBER}.cid \
+  -e NODE_ENV=${environment} ${docker_opts} \
+  ${DOCKER_DEFAULT_OPTS}
+  ${IMAGE_TAG_BUILD} /bin/bash -c "cd /srv/project/deploy && make test"
 
 CONTAINER=`cat ${CID_DIR}/test-${BUILD_NUMBER}.cid`
 
