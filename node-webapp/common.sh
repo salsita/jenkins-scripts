@@ -15,7 +15,7 @@ IMAGE_HASH=`echo "${IMAGE_TAG}" | openssl sha256 -hmac "${IMAGE_HASH_KEY}" | cut
 
 CID_DIR="${WORKSPACE}/../cids"
 DATA_DIR="${WORKSPACE}/../data"
-ARTIFACTS_DIR="${DATA_DIR}/artifacts"
+ARTIFACTS_DIR="${WORKSPACE}/../data/artifacts"
 ARTIFACTS_PUBLIC_DIR="/var/www/artifacts/${IMAGE_TAG}-${IMAGE_HASH}"
 CACHE_DIR="${WORKSPACE}/../data/cache"
 
@@ -25,4 +25,5 @@ DOCKER_DEFAULT_OPTS="-e DEPLOY_DATA_DIR=/data -e DEPLOY_CACHE_DIR=/data/cache -e
 sudo chown jenkins-slave:jenkins-slave ${WORKSPACE}/.. ${DATA_DIR}
 mkdir -p ${CID_DIR}
 mkdir -p ${DATA_DIR}
+mkdir -p ${ARTIFACTS_DIR}
 mkdir -p ${CACHE_DIR}

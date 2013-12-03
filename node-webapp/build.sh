@@ -18,7 +18,7 @@ CONTAINER=$( \
   -e NODE_ENV=${environment} ${docker_opts} ${IMAGE_TAG_BUILD} \
   /bin/bash -c "cd /srv/project/deploy && make build")
 
-$DOCKER attach ${CONTAINER} 
+$DOCKER attach ${CONTAINER}
 
 RC=$($DOCKER wait ${CONTAINER})
 

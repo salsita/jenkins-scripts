@@ -37,7 +37,9 @@ fi
 if [ ${PROJECT_VERSION} ]; then
   ARTIFACT_VERSION="-${PROJECT_VERSION}"
 fi
-ARTIFACT_BUILD="+${BUILD_NUMBER}"
+if [ ${BASE_BUILD_NUMBER} ]; then
+  ARTIFACT_BUILD="+${BASE_BUILD_NUMBER}"
+fi
 
 # append version tag
 if [ ${ONE_FILE} -eq 0 ]; then
@@ -67,3 +69,6 @@ else
 fi
 
 echo "Artifact file published: ${ARTIFACTS_DIR}/${ARTIFACT} => ${ARTIFACTS_PUBLIC_DIR}/${ARTIFACT_PUBLIC}"
+
+# Remove published artifacts
+rm -rf ${ARTIFACTS_DIR}/*
