@@ -20,9 +20,7 @@ ARTIFACTS_PUBLIC_DIR="/var/www/artifacts/${IMAGE_TAG}-${IMAGE_HASH}"
 CACHE_DIR="${WORKSPACE}/../data/cache"
 
 UPSTART_INST="${service}#${environment}"
-DOCKER_DEFAULT_OPTS="-e DEPLOY_CACHE_DIR=${CACHE_DIR} \
-  -e DEPLOY_ARTIFACTS_DIR=${ARTIFACTS_DIR} \
-  -e DEPLOY_DATA_DIR=${DATA_DIR}"
+DOCKER_DEFAULT_OPTS="-e DEPLOY_DATA_DIR=/data -e DEPLOY_CACHE_DIR=/data/cache"
 
 sudo chown -R jenkins-slave:jenkins-slave ${DATA_DIR}
 mkdir -p ${CID_DIR}
