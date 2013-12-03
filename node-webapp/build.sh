@@ -14,6 +14,7 @@ $DOCKER build -t ${IMAGE_TAG_BUILD} .
 CONTAINER=$( \
   $DOCKER run -cidfile ${CID_DIR}/build-${BUILD_NUMBER}.cid -d \
   -v "${DATA_DIR}:/data" \
+  ${DOCKER_DEFAULT_OPTS} \
   -e NODE_ENV=${environment} ${docker_opts} ${IMAGE_TAG_BUILD} \
   /bin/bash -c "cd /srv/project/deploy && make build")
 
