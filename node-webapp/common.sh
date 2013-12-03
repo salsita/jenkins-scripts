@@ -22,7 +22,7 @@ CACHE_DIR="${WORKSPACE}/../data/cache"
 UPSTART_INST="${service}#${environment}"
 DOCKER_DEFAULT_OPTS="-e DEPLOY_DATA_DIR=/data -e DEPLOY_CACHE_DIR=/data/cache -e PROJECT_ROOT=/srv/project"
 
-sudo chown -R jenkins-slave:jenkins-slave ${DATA_DIR}
+sudo chown jenkins-slave:jenkins-slave ${WORKSPACE}/.. ${DATA_DIR}
 mkdir -p ${CID_DIR}
 mkdir -p ${DATA_DIR}
 mkdir -p ${CACHE_DIR}
