@@ -9,7 +9,7 @@ cd ${WORKSPACE}
 
 $DOCKER run -cidfile ${CID_DIR}/test-${BUILD_NUMBER}.cid \
   -e NODE_ENV=${environment} ${docker_opts} \
-  -v "${DATA_DIR}:/data" \
+#  -v "${DATA_DIR}:/data" \
   ${DOCKER_DEFAULT_OPTS} \
   ${IMAGE_TAG_BUILD} /bin/bash -c "cd /srv/project/deploy && make test"
 
