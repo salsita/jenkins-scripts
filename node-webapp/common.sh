@@ -17,6 +17,7 @@ CID_DIR="${WORKSPACE}/../cids"
 DATA_DIR="${WORKSPACE}/../data"
 ARTIFACTS_DIR="${DATA_DIR}/artifacts"
 ARTIFACTS_PUBLIC_DIR="/var/www/artifacts/${IMAGE_TAG}-${IMAGE_HASH}"
+CACHE_DIR="${WORKSPACE}/../cache"
 
 UPSTART_INST="${service}#${environment}"
 DOCKER_DEFAULT_OPTS="-v ${WORKSPACE}:/srv/project"
