@@ -18,7 +18,7 @@ DATA_DIR="${WORKSPACE}/../data"
 ARTIFACTS_DIR="${DATA_DIR}/artifacts"
 ARTIFACTS_PUBLIC_DIR="/var/www/artifacts/${IMAGE_TAG}-${IMAGE_HASH}"
 CACHE_DIR="${WORKSPACE}/../data/cache"
-BUILD_SCRIPTS_DIR="${WORKSPACE}/../jenkins-scripts/node_webapp"
+BUILD_SCRIPTS_DIR="${WORKSPACE}/../jenkins-scripts/node-webapp"
 
 UPSTART_INST="${service}#${environment}"
 DOCKER_DEFAULT_OPTS="-e NODE_ENV=${environment} -e DEPLOY_DATA_DIR=/data \
