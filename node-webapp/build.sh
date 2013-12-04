@@ -14,7 +14,7 @@ CONTAINER=$( \
   $DOCKER run -d \
   -v "${DATA_DIR}:/data" ${DOCKER_DEFAULT_OPTS} ${docker_opts} \
   ${IMAGE_TAG_BUILD} \
-  /bin/bash -c "cd /build/scripts/plugins/pre-build && sh cache_node_modules.sh")
+  /bin/bash -c "cd /build/scripts/plugins/pre-build && /bin/bash cache_node_modules.sh")
 ${DOCKER} attach ${CONTAINER} 
 ${DOCKER} wait ${CONTAINER}
 ${DOCKER} commit ${CONTAINER} ${IMAGE_TAG_BUILD}
