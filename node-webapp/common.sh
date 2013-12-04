@@ -28,7 +28,7 @@ if [ -d ${BUILD_SCRIPTS_DIR} ]; then
   DOCKER_DEFAULT_OPTS="${DOCKER_DEFAULT_OPTS} -v ${BUILD_SCRIPTS_DIR}:/build/scripts"
 fi;
 
-sudo chown jenkins-slave:jenkins-slave ${WORKSPACE}/.. ${DATA_DIR}
+sudo chown jenkins-slave:jenkins-slave ${WORKSPACE}/.. ${DATA_DIR} || true
 mkdir -p ${CID_DIR}
 mkdir -p ${DATA_DIR}
 mkdir -p ${CACHE_DIR}
