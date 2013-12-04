@@ -21,14 +21,21 @@ CACHE_DIR="${WORKSPACE}/../data/cache"
 BUILD_SCRIPTS_DIR="${WORKSPACE}/../jenkins-scripts/node-webapp"
 
 UPSTART_INST="${service}#${environment}"
-DOCKER_DEFAULT_OPTS="-e NODE_ENV=${environment} -e DEPLOY_DATA_DIR=/data \
-  -e DEPLOY_CACHE_DIR=/data/cache -e PROJECT_ROOT=/srv/project"
+DOCKER_DEFAULT_OPTS="\
+  -e NODE_ENV=${environment} \
+  -e DEPLOY_DATA_DIR=/data \
+  -e DEPLOY_CACHE_DIR=/data/cache \
+  -e PROJECT_ROOT=/srv/project \
+  -v \"${DATA_DIR}:/data\""
 
 if [ -d ${BUILD_SCRIPTS_DIR} ]; then
+  # Add the build scripts into the container.
   DOCKER_DEFAULT_OPTS="${DOCKER_DEFAULT_OPTS} -v ${BUILD_SCRIPTS_DIR}:/build/scripts"
-fi;
+fi
 
-sudo chown jenkins-slave:jenkins-slave ${WORKSPACE}/.. ${DATA_DIR} || true
+sudo chown jenkins-slave:jenkins-slave ${WORKSPACE}/..
+
 mkdir -p ${CID_DIR}
 mkdir -p ${DATA_DIR}
+sudo chown jenkins-slave:jenkins-slave ${DATA_DIR}
 mkdir -p ${CACHE_DIR}

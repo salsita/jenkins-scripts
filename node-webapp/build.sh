@@ -10,21 +10,15 @@ cd ${WORKSPACE}
 ### Build the new Docker image to use for the job.
 $DOCKER build -t ${IMAGE_TAG_BUILD} .
 
-CONTAINER=$( \
-  $DOCKER run -d \
-  -v "${DATA_DIR}:/data" ${DOCKER_DEFAULT_OPTS} ${docker_opts} \
-  ${IMAGE_TAG_BUILD} \
-  /bin/bash -c "cd /build/scripts/plugins/pre-build && /bin/bash cache_node_modules.sh")
-${DOCKER} attach ${CONTAINER} 
-${DOCKER} wait ${CONTAINER}
-${DOCKER} commit ${CONTAINER} ${IMAGE_TAG_BUILD}
+echo "Running pre-build plugins..."
+PLUGIN_PATH=${BUILD_SCRIPTS_DIR}/plugins pluginhook pre-build ${IMAGE_TAG_BUILD}
+echo "All pre-build plugins done..."
 
 # Run in the background so that we know the container id.
 CONTAINER=$( \
   $DOCKER run -cidfile ${CID_DIR}/build-${BUILD_NUMBER}.cid -d \
-  -v "${DATA_DIR}:/data" \
-  ${DOCKER_DEFAULT_OPTS} \
-  ${docker_opts} ${IMAGE_TAG_BUILD} \
+  ${DOCKER_DEFAULT_OPTS} ${docker_opts} \
+  ${IMAGE_TAG_BUILD} \
   /bin/bash -c "cd /srv/project/deploy && make build")
 
 $DOCKER attach ${CONTAINER} 
