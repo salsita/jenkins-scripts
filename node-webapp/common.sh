@@ -18,10 +18,11 @@ DATA_DIR="${WORKSPACE}/../data"
 ARTIFACTS_DIR="${DATA_DIR}/artifacts"
 ARTIFACTS_PUBLIC_DIR="/var/www/artifacts/${IMAGE_TAG}-${IMAGE_HASH}"
 CACHE_DIR="${WORKSPACE}/../data/cache"
-BUILD_SCRIPTS_DIR="${WORKSPACE}/../jenkins_scripts"
+BUILD_SCRIPTS_DIR="${WORKSPACE}/../jenkins_scripts/node_webapp"
 
 UPSTART_INST="${service}#${environment}"
-DOCKER_DEFAULT_OPTS="-e DEPLOY_DATA_DIR=/data -e DEPLOY_CACHE_DIR=/data/cache -e PROJECT_ROOT=/srv/project"
+DOCKER_DEFAULT_OPTS="-e NODE_ENV=${environment} -e DEPLOY_DATA_DIR=/data \
+  -e DEPLOY_CACHE_DIR=/data/cache -e PROJECT_ROOT=/srv/project"
 
 if [ -d ${BUILD_SCRIPTS_DIR} ]; then
   DOCKER_DEFAULT_OPTS="${DOCKER_DEFAULT_OPTS} -v ${BUILD_SCRIPTS_DIR}:/build/scripts"

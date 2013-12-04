@@ -10,13 +10,21 @@ cd ${WORKSPACE}
 ### Build the new Docker image to use for the job.
 $DOCKER build -t ${IMAGE_TAG_BUILD} .
 
+CONTAINER=$( \
+  $DOCKER run -d
+  -v "${DATA_DIR}:/data" ${DOCKER_DEFAULT_OPTS} ${docker_opts} \
+  ${IMAGE_TAG_BUILD} \
+  /bin/bash -c "cd ${BUILD_SCRIPTS_DIR} && sh plugins/pre-build/cache_node_modules.sh")
+${DOCKER} wait ${CONTAINER}
+${DOCKER} commit ${CONTAINER} ${IMAGE_TAG_BUILD}
+
 # Run in the background so that we know the container id.
 CONTAINER=$( \
   $DOCKER run -cidfile ${CID_DIR}/build-${BUILD_NUMBER}.cid -d \
   -v "${DATA_DIR}:/data" \
   ${DOCKER_DEFAULT_OPTS} \
-  -e NODE_ENV=${environment} ${docker_opts} ${IMAGE_TAG_BUILD} \
-  /bin/bash -c "cd /srv/project/deploy && /build/node_modules_cache.sh && make build")
+  ${docker_opts} ${IMAGE_TAG_BUILD} \
+  /bin/bash -c "cd /srv/project/deploy && make build")
 
 $DOCKER attach ${CONTAINER} 
 
