@@ -18,12 +18,13 @@ DATA_DIR="${WORKSPACE}/../data"
 ARTIFACTS_DIR="${DATA_DIR}/artifacts"
 ARTIFACTS_PUBLIC_DIR="/var/www/artifacts/${IMAGE_TAG}-${IMAGE_HASH}"
 CACHE_DIR="${WORKSPACE}/../data/cache"
+BUILD_SCRIPTS_DIR="${WORKSPACE}/../jenkins_scripts"
 
 UPSTART_INST="${service}#${environment}"
 DOCKER_DEFAULT_OPTS="-e DEPLOY_DATA_DIR=/data -e DEPLOY_CACHE_DIR=/data/cache -e PROJECT_ROOT=/srv/project"
 
-if [ -d ${WORKSPACE}/../jenkins_scripts ];
-  DOCKER_DEFAULT_OPTS="${DOCKER_DEFAULT_OPTS} -v ${WORKSPACE}/../jenkins_scripts:/build/scripts"
+if [ -d ${BUILD_SCRIPTS_DIR} ]; then
+  DOCKER_DEFAULT_OPTS="${DOCKER_DEFAULT_OPTS} -v ${BUILD_SCRIPTS_DIR}:/build/scripts"
 fi;
 
 sudo chown jenkins-slave:jenkins-slave ${WORKSPACE}/.. ${DATA_DIR}
