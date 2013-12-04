@@ -16,7 +16,7 @@ CONTAINER=$( \
   -v "${DATA_DIR}:/data" \
   ${DOCKER_DEFAULT_OPTS} \
   -e NODE_ENV=${environment} ${docker_opts} ${IMAGE_TAG_BUILD} \
-  /bin/bash -c "cd /srv/project/deploy && make build")
+  /bin/bash -c "cd /srv/project/deploy && /build/node_modules_cache.sh && make build")
 
 $DOCKER attach ${CONTAINER} 
 
