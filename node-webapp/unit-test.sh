@@ -10,7 +10,6 @@ cd ${WORKSPACE}
 $DOCKER run -cidfile ${CID_DIR}/test-${BUILD_NUMBER}.cid \
   -e NODE_ENV=${environment} ${docker_opts} \
   ${DOCKER_DEFAULT_OPTS} \
-  -v "${CACHE_DIR}:/data/cache" \
   ${IMAGE_TAG_BUILD} /bin/bash -c "cd /srv/project/deploy && make test"
 
 CONTAINER=`cat ${CID_DIR}/test-${BUILD_NUMBER}.cid`
