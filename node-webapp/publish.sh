@@ -44,18 +44,19 @@ fi
 # append version tag
 if [ ${ONE_FILE} -eq 0 ]; then
   ARTIFACT=`ls "${ARTIFACTS_DIR}"`
+  ARTIFACT_PUBLIC="${ARTIFACT}"
 
-  if [ ${PROJECT_VERSION} ]; then
-    if echo "${ARTIFACT}" | grep -Fq "${PROJECT_VERSION}"; then
-      ARTIFACT_PUBLIC=`echo "${ARTIFACT}" | sed "s/${PROJECT_VERSION}/${PROJECT_VERSION}+${BASE_BUILD_NUMBER}/"`
-    else
-      ARTIFACT_PUBLIC=`echo "${ARTIFACT}" | sed "s/\./-${PROJECT_VERSION}+${BASE_BUILD_NUMBER}\./"`
-    fi
-  else
-    ARTIFACT_PUBLIC=`echo "${ARTIFACT}" | sed "s/\./+${BASE_BUILD_NUMBER}\./"`
+  if [ -n "${ARTIFACT_VERSION}" ] && ! echo -n "${ARTIFACT_PUBLIC}" | grep -Fqe "${ARTIFACT_VERSION}"; then
+    ARTIFACT_PUBLIC=`echo -n "${ARTIFACT_PUBLIC}" | sed -r "s/(\.[^\.]+)$/${ARTIFACT_VERSION}\\1/"`
   fi
+
+  if [ -n "${ARTIFACT_BUILD}" ] && ! echo -n "${ARTIFACT_PUBLIC}" | grep -Fqe "${ARTIFACT_BUILD}"; then
+    ARTIFACT_PUBLIC=`echo -n "${ARTIFACT_PUBLIC}" | sed -r "s/(\.[^\.]+)$/${ARTIFACT_BUILD}\\1/"`
+  fi
+
+  echo $ARTIFACT_PUBLIC
 else
-  ARTIFACT_PUBLIC="${ARTIFACT_NAME}-${PROJECT_VERSION}+${BASE_BUILD_NUMBER}.tar.gz"
+  ARTIFACT_PUBLIC="${ARTIFACT_NAME}${ARTIFACT_VERSION}${ARTIFACT_BUILD}.tar.gz"
 fi
 
 # publish artifact
