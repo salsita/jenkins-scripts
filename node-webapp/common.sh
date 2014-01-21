@@ -26,6 +26,7 @@ DOCKER_DEFAULT_OPTS="\
   -e DEPLOY_DATA_DIR=/data \
   -e DEPLOY_CACHE_DIR=/data/cache \
   -e PROJECT_ROOT=/srv/project \
+  -e BUILD_NUMBER=${BUILD_NUMBER} \
   -v ${DATA_DIR}:/data"
 
 if [ -d ${BUILD_SCRIPTS_DIR} ]; then
