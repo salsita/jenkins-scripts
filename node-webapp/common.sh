@@ -18,14 +18,28 @@ DATA_DIR="${WORKSPACE}/../data"
 ARTIFACTS_DIR="${WORKSPACE}/../data/artifacts"
 ARTIFACTS_PUBLIC_DIR="/var/www/artifacts/${IMAGE_TAG}-${IMAGE_HASH}"
 CACHE_DIR="${WORKSPACE}/../data/cache"
-
+BUILD_SCRIPTS_DIR="${WORKSPACE}/../jenkins-scripts/node-webapp"
 UPSTART_INST="${service}#${environment}"
-DOCKER_DEFAULT_OPTS="-e DEPLOY_DATA_DIR=/data -e DEPLOY_CACHE_DIR=/data/cache -e PROJECT_ROOT=/srv/project -e BUILD_NUMBER=${BASE_BUILD_NUMBER} -m=512m -c=512"
 
+
+DOCKER_DEFAULT_OPTS="\
+  -e NODE_ENV=${environment} \
+  -e DEPLOY_DATA_DIR=/data \
+  -e DEPLOY_CACHE_DIR=/data/cache \
+  -e PROJECT_ROOT=/srv/project \
+  -e BUILD_NUMBER=${BASE_BUILD_NUMBER} \
+  -m=512m -c=512 \
+  -v ${DATA_DIR}:/data"
+
+if [ -d ${BUILD_SCRIPTS_DIR} ]; then
+  # Add the build scripts into the container.
+  DOCKER_DEFAULT_OPTS="${DOCKER_DEFAULT_OPTS} -v ${BUILD_SCRIPTS_DIR}:/build/scripts"
+fi
 
 sudo chown jenkins-slave:jenkins-slave ${WORKSPACE}/..
-mkdir -p ${DATA_DIR}
-sudo chown jenkins-slave:jenkins-slave ${DATA_DIR}
+
 mkdir -p ${CID_DIR}
+mkdir -p ${DATA_DIR}
 mkdir -p ${ARTIFACTS_DIR}
+sudo chown jenkins-slave:jenkins-slave ${DATA_DIR}
 mkdir -p ${CACHE_DIR}
