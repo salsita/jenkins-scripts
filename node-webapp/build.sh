@@ -34,7 +34,7 @@ $DOCKER commit ${CONTAINER} ${IMAGE_TAG_BUILD}
 
 # Symlink `data` dir into workspace so that we can view logs.
 # Note: cleaning the workspace will not delete the data (it will just delete the symlink).
-cd ${WORKSPACE}
-if [ -d "${DATA_DIR}" ] && [ ! -L "./.docker_data" ]; then
-  ln -s "${DATA_DIR}" ./.docker_data
-fi
+#cd ${WORKSPACE}
+#if [ -d "${DATA_DIR}" ] && [ ! -L "./.docker_data" ]; then
+#  ln -s "${DATA_DIR}" ./.docker_data
+#fi
