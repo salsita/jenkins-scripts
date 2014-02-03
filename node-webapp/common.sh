@@ -27,11 +27,14 @@ DOCKER_DEFAULT_OPTS="\
   -e DEPLOY_DATA_DIR=/data \
   -e DEPLOY_CACHE_DIR=/data/cache \
   -e PROJECT_ROOT=/srv/project \
-  -e BUILD_NUMBER=${BASE_BUILD_NUMBER} \
   -m=512m -c=512 \
   -v ${DATA_DIR}:/data"
 
-if [ -d ${BUILD_SCRIPTS_DIR} ]; then
+if [ ! -z "${BASE_BUILD_NUMBER}" ]; then
+  DOCKER_DEFAULT_OPTS="${DOCKER_DEFAULT_OPTS} -e BUILD_NUMBER=${BASE_BUILD_NUMBER}"
+fi
+
+if [ -d "${BUILD_SCRIPTS_DIR}" ]; then
   # Add the build scripts into the container.
   DOCKER_DEFAULT_OPTS="${DOCKER_DEFAULT_OPTS} -v ${BUILD_SCRIPTS_DIR}:/build/scripts"
 fi
