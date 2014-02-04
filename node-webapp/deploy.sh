@@ -29,4 +29,12 @@ sudo tail -50 /var/log/upstart/node-webapp-${UPSTART_INST}.log
 status node-webapp INST=${UPSTART_INST} | grep 'running'
 RC=$?
 
+# Allow users to see logs in the Jenkins workspace (symlink LOG_DIR into
+# the workspace). Cleaning the workspace will just remove the symlink.
+pushd ${WORKSPACE}
+if [ -d "${LOG_DIR}" ] && [ ! -L "./.docker_logs" ]; then
+  ln -s "${LOG_DIR}" ./.docker_logs
+fi
+popd
+
 exit ${RC}

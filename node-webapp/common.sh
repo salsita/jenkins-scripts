@@ -15,6 +15,7 @@ IMAGE_HASH=`echo "${IMAGE_TAG}" | openssl sha256 -hmac "${IMAGE_HASH_KEY}" | cut
 
 CID_DIR="${WORKSPACE}/../cids"
 DATA_DIR="${WORKSPACE}/../data"
+LOG_DIR="${WORKSPACE}/../data/log"
 ARTIFACTS_DIR="${WORKSPACE}/../data/artifacts"
 ARTIFACTS_PUBLIC_DIR="/var/www/artifacts/${IMAGE_TAG}-${IMAGE_HASH}"
 CACHE_DIR="${WORKSPACE}/../data/cache"
