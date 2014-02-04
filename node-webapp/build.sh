@@ -7,6 +7,16 @@ source common.sh
 
 cd ${WORKSPACE}
 
+# Look for project dependency definition files
+# and set their mtime to the datetime of last commit when they were changed
+# (mtime is used by Dockerfile ADD command to determine whether to use a file from cache or not)
+FILES=`find . -name 'package.json' -o -name 'bower.json' -o -name '.bowerrc'`
+for FILE in ${FILES}; do
+  REV=$(git rev-list -n 1 HEAD "${FILE}")
+  TIMESTAMP=$(git show --pretty=format:%ai --abbrev-commit "${REV}" | head -n 1)
+  touch -d "${TIMESTAMP}" "${FILE}"
+done
+
 ### Build the new Docker image to use for the job.
 $DOCKER build -t ${IMAGE_TAG_BUILD} .
 
