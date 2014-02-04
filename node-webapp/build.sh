@@ -7,9 +7,11 @@ source common.sh
 
 cd ${WORKSPACE}
 
-# Look for well-known project dependency definition files
-# and set their mtime to the datetime of last commit when they were changed
-# (mtime is used by Dockerfile ADD command to determine whether to use a file from cache or not)
+### Project-specific dependencies caching in Docker
+# Project dependency definition files need to have set correct mtime,
+# so Docker can cache them properly.
+# This probably won't be needed in the future.
+# @see https://github.com/dotcloud/docker/issues/3699
 FILENAMES=(
   '.npmrc'
   '.npmignore'
@@ -17,12 +19,20 @@ FILENAMES=(
   '.bowerrc'
   'bower.json'
 )
-FIND_PARAMS="-name `echo ${FILENAMES[@]} | sed 's/ / -or -name /g'`"
-for FILE in `find . ${FIND_PARAMS}`; do
+# find them
+FIND_PARAMS="-name `echo -n ${FILENAMES[@]} | sed 's/ / -or -name /g'`"
+FILES=`find . ${FIND_PARAMS}`
+# allow project to specify its own files
+if [ -f .docker-cache ]; then
+  FILES+=($(cat .docker-cache))
+fi
+# set mtime from last git commit, where they changed
+for FILE in ${FILES[@]}; do
   REV=`git rev-list -n 1 HEAD "${FILE}"`
   TIMESTAMP=`git show --pretty=format:%ai --abbrev-commit "${REV}" | head -n 1`
   touch -d "${TIMESTAMP}" "${FILE}"
 done
+
 
 ### Build the new Docker image to use for the job.
 $DOCKER build -t ${IMAGE_TAG_BUILD} .
